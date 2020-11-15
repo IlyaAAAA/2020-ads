@@ -100,10 +100,12 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             return new Node(key, value);
         }
 
-        if (node.key == key) {
+        int compare = node.key.compareTo(key);
+
+        if (compare == 0) {
             node.value = value;
         }
-        else if (node.key.compareTo(key) > 0) {
+        else if (compare > 0) {
             node.left = put(node.left, key, value);
         }
         else {
@@ -120,10 +122,12 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             return null;
         }
 
-        if (node.key == key) {
+        int compare = node.key.compareTo(key);
+
+        if (compare == 0) {
             node = innerDelete(node);
         }
-        else if (node.key.compareTo(key) < 0) {
+        else if (compare < 0) {
             node.right = removeByKey(node.right, key);
         }
         else {
@@ -164,11 +168,12 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             return null;
         }
 
-        if (node.key == key) {
+        int compare = node.key.compareTo(key);
+
+        if (compare == 0) {
             return node;
         }
-
-        if (key.compareTo(node.key) > 0) {
+        else if (compare < 0) {
              return findByKey(node.right, key);
         }
         else {
@@ -219,13 +224,15 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
         Node node = root;
 
-        if (node.key == key) {
+        int compareNodeAndKey = key.compareTo(node.key);
+
+        if (compareNodeAndKey == 0) {
             return node;
         }
 
-        if (key.compareTo(node.key) > 0) {
+        if (compareNodeAndKey > 0) {
             if (node.right == null) {
-                return key.compareTo(node.key) > 0 ? null : node;
+                return null;
             }
             node = getCeil(node.right, key);
         }
@@ -245,14 +252,16 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
 
         Node node = root;
-        
-        if (node.key == key) {
+
+        int compareNodeAndKey = key.compareTo(node.key);
+
+        if (compareNodeAndKey == 0) {
             return node;
         }
 
-        if (key.compareTo(root.key) > 0) {
+        if (compareNodeAndKey > 0) {
             if (node.right != null) {
-                if (key.compareTo(root.right.key) < 0) {
+                if (key.compareTo(node.right.key) < 0) {
                   return node;
                 }
             }
