@@ -205,24 +205,18 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     Node node = root;
 
-    int compareNodeAndKey = key.compareTo(node.key);
+    int compare = key.compareTo(node.key);
 
-    if (compareNodeAndKey == 0) {
+    if (compare == 0) {
       return node;
     }
 
-    if (compareNodeAndKey > 0) {
-      if (node.right == null) {
-        return null;
-      }
-      node = getCeil(node.right, key);
-    } else if (node.left != null) {
-      Node leftNode = getCeil(node.left, key);
-      if (leftNode != null && leftNode.key.compareTo(key) >= 0) {
-        node = leftNode;
-      }
+    if (compare > 0) {
+      return getCeil(node.right, key);
     }
-    return node;
+
+    Node left = getCeil(node.left, key);
+    return left == null ? node : left;
   }
 
   private Node getFloor(Node root, Key key) {
@@ -233,26 +227,19 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     Node node = root;
 
-    int compareNodeAndKey = key.compareTo(node.key);
+    int compare = key.compareTo(node.key);
 
-    if (compareNodeAndKey == 0) {
+    if (compare == 0) {
       return node;
     }
 
-    if (compareNodeAndKey > 0) {
-      if (node.right != null) {
-        if (key.compareTo(node.right.key) < 0) {
-          return node;
-        }
-      }
-      if (root.right == null) {
-        return node;
-      }
-      node = getFloor(node.right, key);
-    } else {
-      node = getFloor(node.left, key);
+    if (compare < 0) {
+      return getFloor(node.left, key);
     }
-    return node;
+
+    Node right = getFloor(node.right, key);
+
+    return right == null ? node : right;
   }
 
   private Node rotateRight(Node parent) {
