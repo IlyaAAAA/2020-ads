@@ -176,14 +176,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         return node;
     }
 
-    private int height(Node node) {
-        return node == null ? 0 : node.height;
-    }
-
-    private void fixHeight(Node node) {
-        node.height = 1 + Math.max(height(node.left), height(node.right));
-    }
-
     private Node getCeil(Node root, Key key) {
         if (root == null) {
             return null;
@@ -241,23 +233,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         return node;
     }
 
-    private Node balance(Node node) {
-        if (getHeightDiff(node) == 2) {
-            if (getHeightDiff(node.left) < 0) {
-                node.left = rotateLeft(node.left);
-            }
-            return rotateRight(node);
-        }
-        if (getHeightDiff(node) == -2) {
-            if (getHeightDiff(node.right) > 0) {
-                node.right = rotateRight(node.right);
-            }
-            return rotateLeft(node);
-        }
-
-        return node;
-    }
-
     private int getHeightDiff(Node node) {
         return height(node.left) - height(node.right);
     }
@@ -267,9 +242,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         parent.left = children.right;
         children.right = parent;
 
-        fixHeight(parent);
-        fixHeight(children);
-
         return children;
     }
 
@@ -278,8 +250,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         parent.right = children.left;
         children.left = parent;
 
-        fixHeight(parent);
-        fixHeight(children);
         return children;
     }
 }
