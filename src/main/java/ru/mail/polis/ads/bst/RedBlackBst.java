@@ -140,7 +140,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
           node = moveRedRight(node);
         }
 
-        if (key == node.key) {
+        if (key.equals(node.key)) {
           Node min = findNodeMinKey(node.right);
           node.key = min.key;
           node.value = min.value;
