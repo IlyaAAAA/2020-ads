@@ -3,8 +3,6 @@ package ru.mail.polis.ads.hash;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
 
   private final double LOAD_FACTOR = 0.75;
