@@ -50,23 +50,29 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
       resize();
       if (nodes[index] == null) {
         nodes[index] = new Node<>(key, value);
-        elementsNumber++;
       } else {
 
         Node<Key, Value> node = nodes[index];
 
-        while (node.next != null && !node.key.equals(key)) {
+        while (node != null) {
+
+          if (node.key.equals(key)) {
+            node.key = key;
+            node.value = value;
+            return;
+          }
+
+          if (node.next == null) {
+            break;
+          }
           node = node.next;
         }
 
-        if (node.key.equals(key)) {
-          node.key = key;
-          node.value = value;
-        } else {
+        if (node != null) {
           node.next = new Node<>(key, value);
-          elementsNumber++;
         }
       }
+      elementsNumber++;
     }
   }
 
@@ -78,24 +84,24 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
       if (nodes[index] != null) {
         Node<Key, Value> node = nodes[index];
 
-        while (nodes[index] != null && !nodes[index].key.equals(key)) {
-          nodes[index] = nodes[index].next;
-        }
+        while (nodes[index] != null) {
 
-        if (nodes[index].key.equals(key)) {
+          if (nodes[index].key.equals(key)) {
 
-          Value valueToReturn = node.value;
-          nodes[index] = nodes[index].next;
-          elementsNumber--;
+            Value valueToReturn = node.value;
+            nodes[index] = nodes[index].next;
+            elementsNumber--;
 
-          if (!node.key.equals(key)) {
-            nodes[index] = node;
+            if (!node.key.equals(key)) {
+              nodes[index] = node;
+            }
+
+            return valueToReturn;
           }
 
-          return valueToReturn;
-        } else {
-          return null;
+          nodes[index] = nodes[index].next;
         }
+
       }
     }
     return null;
