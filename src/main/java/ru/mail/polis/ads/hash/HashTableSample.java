@@ -125,15 +125,17 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
   }
 
   private void rehash() {
-    Node<Key, Value>[] tmp = new Node[arrSize];
+    int sizeBeforeRehash = elementsNumber;
+    Node<Key, Value>[] tmp = nodes;
+    nodes = new Node[arrSize];
 
-    for (var node : nodes) {
-      if (node != null) {
-        int index = findIndex(node.key.hashCode());
-        tmp[index] = node;
+    for (var node : tmp) {
+      while (node != null) {
+        put(node.key, node.value);
+        node = node.next;
       }
     }
-    nodes = tmp;
+    elementsNumber -= sizeBeforeRehash;
   }
 
   private int findIndex(int hashCode) {
