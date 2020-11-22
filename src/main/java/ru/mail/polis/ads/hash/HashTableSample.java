@@ -3,6 +3,8 @@ package ru.mail.polis.ads.hash;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
 
   private final double LOAD_FACTOR = 0.75;
@@ -11,7 +13,7 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
 
   private int arrSize = 16;
 
-  private static class Node<Key , Value> {
+  private static class Node<Key, Value> {
     private Key key;
     private Value value;
     private Node<Key, Value> next;
@@ -47,6 +49,7 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
     int index = findIndex(key.hashCode());
 
     if (index < nodes.length) {
+      resize();
       if (nodes[index] == null) {
         nodes[index] = new Node<>(key, value);
         elementsNumber++;
@@ -119,15 +122,17 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
 
   private void rehash() {
     Node<Key, Value>[] tmp = new Node[arrSize];
-    
+
     for (var node : nodes) {
-      int index = findIndex(node.key.hashCode());
-      tmp[index] = new Node<>(node.key, node.value);
+      if (node != null) {
+        int index = findIndex(node.key.hashCode());
+        tmp[index] = node;
+      }
     }
     nodes = tmp;
   }
 
   private int findIndex(int hashCode) {
-    return (hashCode & 0x7fffffff) % nodes.length;
+    return (hashCode & 0x7fffffff) % arrSize;
   }
 }
