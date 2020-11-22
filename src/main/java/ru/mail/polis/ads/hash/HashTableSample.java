@@ -7,7 +7,7 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
 
   private final double LOAD_FACTOR = 0.75;
 
-  private int elementsNumber = 0;
+  private int elementsNumber;
 
   private int arrSize = 16;
 
@@ -27,14 +27,18 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
   @Override
   public @Nullable Value get(@NotNull Key key) {
     int index = findIndex(key.hashCode());
+
     if (index < nodes.length && nodes[index] != null) {
+
       Node<Key, Value> node = nodes[index];
 
       while (node != null && !node.key.equals(key)) {
         node = node.next;
       }
+
       return node == null ? null : node.value;
     }
+
     return null;
   }
 
@@ -47,6 +51,7 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
         nodes[index] = new Node<>(key, value);
         elementsNumber++;
       } else {
+
         Node<Key, Value> node = nodes[index];
 
         while (node.next != null && !node.key.equals(key)) {
@@ -77,12 +82,15 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
         }
 
         if (nodes[index].key.equals(key)) {
+
           Value valueToReturn = node.value;
           nodes[index] = nodes[index].next;
           elementsNumber--;
+
           if (!node.key.equals(key)) {
             nodes[index] = node;
           }
+
           return valueToReturn;
         } else {
           return null;
@@ -111,6 +119,7 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
 
   private void rehash() {
     Node<Key, Value>[] tmp = new Node[arrSize];
+    
     for (var node : nodes) {
       int index = findIndex(node.key.hashCode());
       tmp[index] = new Node<>(node.key, node.value);
