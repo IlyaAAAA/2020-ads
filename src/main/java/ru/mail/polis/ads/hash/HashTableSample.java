@@ -3,7 +3,7 @@ package ru.mail.polis.ads.hash;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class HashTableSample<Key extends Comparable<Key>, Value> implements HashTable<Key, Value> {
+public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
 
   private final double LOAD_FACTOR = 0.75;
 
@@ -11,7 +11,7 @@ public class HashTableSample<Key extends Comparable<Key>, Value> implements Hash
 
   private int arrSize = 16;
 
-  private static class Node<Key extends Comparable<Key>, Value> {
+  private static class Node<Key , Value> {
     private Key key;
     private Value value;
     private Node<Key, Value> next;
