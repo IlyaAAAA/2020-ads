@@ -28,7 +28,7 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
   public @Nullable Value get(@NotNull Key key) {
     int index = findIndex(key.hashCode());
 
-    if (index < nodes.length && nodes[index] != null) {
+    if (nodes[index] != null) {
 
       Node<Key, Value> node = nodes[index];
 
@@ -46,64 +46,62 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
   public void put(@NotNull Key key, @NotNull Value value) {
     int index = findIndex(key.hashCode());
 
-    if (index < nodes.length) {
-      resize();
-      if (nodes[index] == null) {
-        nodes[index] = new Node<>(key, value);
-      } else {
+    resize();
+    if (nodes[index] == null) {
+      nodes[index] = new Node<>(key, value);
+    } else {
 
-        Node<Key, Value> node = nodes[index];
+      Node<Key, Value> node = nodes[index];
 
-        while (node != null) {
+      while (node != null) {
 
-          if (node.key.equals(key)) {
-            node.key = key;
-            node.value = value;
-            return;
-          }
-
-          if (node.next == null) {
-            break;
-          }
-          node = node.next;
+        if (node.key.equals(key)) {
+          node.key = key;
+          node.value = value;
+          return;
         }
 
-        if (node != null) {
-          node.next = new Node<>(key, value);
+        if (node.next == null) {
+          break;
         }
+        node = node.next;
       }
-      elementsNumber++;
+
+      if (node != null) {
+        node.next = new Node<>(key, value);
+      }
     }
+    elementsNumber++;
+
   }
 
   @Override
   public @Nullable Value remove(@NotNull Key key) {
     int index = findIndex(key.hashCode());
 
-    if (index < nodes.length) {
-      if (nodes[index] != null) {
-        Node<Key, Value> node = nodes[index];
+    if (nodes[index] != null) {
+      Node<Key, Value> node = nodes[index];
 
-        while (nodes[index] != null) {
+      while (nodes[index] != null) {
 
-          if (nodes[index].key.equals(key)) {
+        if (nodes[index].key.equals(key)) {
 
-            Value valueToReturn = node.value;
-            nodes[index] = nodes[index].next;
-            elementsNumber--;
+          Value valueToReturn = node.value;
+          nodes[index] = nodes[index].next;
+          elementsNumber--;
 
-            if (!node.key.equals(key)) {
-              nodes[index] = node;
-            }
-
-            return valueToReturn;
+          if (!node.key.equals(key)) {
+            nodes[index] = node;
           }
 
-          nodes[index] = nodes[index].next;
+          return valueToReturn;
         }
 
+        nodes[index] = nodes[index].next;
       }
+
     }
+
     return null;
   }
 
