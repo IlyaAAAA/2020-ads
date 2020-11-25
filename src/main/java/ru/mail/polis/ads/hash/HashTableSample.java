@@ -46,33 +46,26 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
   public void put(@NotNull Key key, @NotNull Value value) {
     int index = findIndex(key.hashCode());
 
-    resize();
     if (nodes[index] == null) {
       nodes[index] = new Node<>(key, value);
     } else {
 
       Node<Key, Value> node = nodes[index];
 
-      while (node != null) {
+      while (node.next != null || node.key.equals(key)) {
 
         if (node.key.equals(key)) {
           node.key = key;
           node.value = value;
           return;
         }
-
-        if (node.next == null) {
-          break;
-        }
         node = node.next;
       }
 
-      if (node != null) {
-        node.next = new Node<>(key, value);
-      }
+      node.next = new Node<>(key, value);
     }
     elementsNumber++;
-
+    resize();
   }
 
   @Override
@@ -123,7 +116,7 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
   }
 
   private void rehash() {
-    int sizeBeforeRehash = elementsNumber;
+    elementsNumber = 0;
     Node<Key, Value>[] tmp = nodes;
     nodes = new Node[arrSize];
 
@@ -133,7 +126,6 @@ public class HashTableSample<Key, Value> implements HashTable<Key, Value> {
         node = node.next;
       }
     }
-    elementsNumber -= sizeBeforeRehash;
   }
 
   private int findIndex(int hashCode) {
