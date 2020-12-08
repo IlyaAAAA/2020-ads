@@ -18,7 +18,8 @@ public class Problem4 {
   private static int[] d;
   private static boolean[] visited;
   private static int[] parentsMin;
-  private static final Deque<Integer> deque = new ArrayDeque<>();
+  private static final Queue<Integer> queue = new ArrayDeque<>();
+  private static final Stack<Integer> stack = new Stack<>();
 
   private static void solve(final FastScanner in, final PrintWriter out) {
     int n = in.nextInt();
@@ -50,7 +51,7 @@ public class Problem4 {
 
     if (d[vertexTo] != Integer.MAX_VALUE) {
       out.println(d[vertexTo]);
-      findWay(vertexFrom, vertexTo);
+      findWay(vertexTo);
       printWay(out);
     } else {
       out.println(-1);
@@ -59,11 +60,12 @@ public class Problem4 {
 
   private static void findMinLength(List<List<Rib>> list, int vertexFrom) {
     d[vertexFrom] = 0;
-    deque.addLast(vertexFrom);
-    visited[vertexFrom] = true;
+    parentsMin[vertexFrom] = -1;
+    queue.add(vertexFrom);
 
-    while (!deque.isEmpty()) {
-      int i = deque.pollFirst();
+    while (!queue.isEmpty()) {
+      int i = queue.poll();
+      visited[i] = true;
       List<Rib> ribs = list.get(i);
       for (Rib rib : ribs) {
         if (d[i] + rib.value < d[rib.vertexTo]) {
@@ -71,25 +73,23 @@ public class Problem4 {
           parentsMin[rib.vertexTo] = i;
         }
         if (!visited[rib.vertexTo]) {
-          visited[rib.vertexTo] = true;
-          deque.addLast(rib.vertexTo);
+          queue.add(rib.vertexTo);
         }
       }
     }
   }
 
-  private static void findWay(int vertexFrom, int vertexTo) {
-    deque.clear();
-    while (vertexTo != vertexFrom) {
-      deque.addFirst(vertexTo + 1);
+
+  private static void findWay(int vertexTo) {
+    while (vertexTo != -1) {
+      stack.add(vertexTo + 1);
       vertexTo = parentsMin[vertexTo];
     }
-    deque.addFirst(vertexTo + 1);
   }
 
   private static void printWay(final PrintWriter out) {
-    while (!deque.isEmpty()) {
-     out.print(deque.pollFirst() + " ");
+    while (!stack.isEmpty()) {
+      out.print(stack.pop() + " ");
     }
   }
 
