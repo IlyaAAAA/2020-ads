@@ -5,6 +5,13 @@ import java.util.*;
 
 public class Problem4 {
 
+  private static int[] d;
+  private static boolean[] visited;
+  private static int[] parentsMin;
+  private static final Queue<Integer> queue = new ArrayDeque<>();
+  private static final Stack<Integer> stack = new Stack<>();
+  private static final List<List<Rib>> list = new ArrayList<>();
+
   private static class Rib {
     int vertexTo;
     int value;
@@ -14,13 +21,6 @@ public class Problem4 {
       this.value = value;
     }
   }
-
-  private static int[] d;
-  private static boolean[] visited;
-  private static int[] parentsMin;
-  private static final Queue<Integer> queue = new ArrayDeque<>();
-  private static final Stack<Integer> stack = new Stack<>();
-  private static final List<List<Rib>> list = new ArrayList<>();
 
   private static void solve(final FastScanner in, final PrintWriter out) {
     int n = in.nextInt();

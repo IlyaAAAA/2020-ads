@@ -5,15 +5,15 @@ import java.util.*;
 
 public class Problem1 {
 
+  private static Color[] color;
+  private static boolean isCycled = false;
+  private static final Deque<Integer> deque = new ArrayDeque<>();
+
   private enum Color {
     WHITE,
     GREY,
     BLACK
   }
-
-  private static Color[] color;
-  private static boolean isCycled = false;
-  private static final Deque<Integer> deque = new ArrayDeque<>();
 
   private static void solve(final FastScanner in, final PrintWriter out) {
     int vertexes = in.nextInt();

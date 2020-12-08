@@ -5,6 +5,8 @@ import java.util.*;
 
 public class Problem3 {
 
+  private static int[] d;
+
   private static class Rib {
     int vertexTo;
     int value;
@@ -14,8 +16,6 @@ public class Problem3 {
       this.value = value;
     }
   }
-
-  private static int[] d;
 
   private static void solve(final FastScanner in, final PrintWriter out) {
     int n = in.nextInt();

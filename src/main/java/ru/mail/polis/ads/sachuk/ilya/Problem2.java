@@ -5,12 +5,6 @@ import java.util.*;
 
 public class Problem2 {
 
-  private enum Color {
-    WHITE,
-    GREY,
-    BLACK
-  }
-
   private static Color[] color;
   private static int min = Integer.MAX_VALUE;
   private static boolean isCycled = false;
@@ -18,6 +12,12 @@ public class Problem2 {
   private static int cycleStart;
   private static int cycleEnd;
   private static int[] parents;
+
+  private enum Color {
+    WHITE,
+    GREY,
+    BLACK
+  }
 
   private static void solve(final FastScanner in, final PrintWriter out) {
     int n = in.nextInt();
