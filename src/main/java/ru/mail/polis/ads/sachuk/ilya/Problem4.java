@@ -20,12 +20,12 @@ public class Problem4 {
   private static int[] parentsMin;
   private static final Queue<Integer> queue = new ArrayDeque<>();
   private static final Stack<Integer> stack = new Stack<>();
+  private static final List<List<Rib>> list = new ArrayList<>();
 
   private static void solve(final FastScanner in, final PrintWriter out) {
     int n = in.nextInt();
     int m = in.nextInt();
 
-    List<List<Rib>> list = new ArrayList<>();
     d = new int[n];
     visited = new boolean[n];
     parentsMin = new int[n];
@@ -47,7 +47,10 @@ public class Problem4 {
       list.get(to).add(new Rib(from, value));
     }
 
-    findMinLength(list, vertexFrom);
+    d[vertexFrom] = 0;
+    parentsMin[vertexFrom] = -1;
+
+    findMinLength(vertexFrom);
 
     if (d[vertexTo] != Integer.MAX_VALUE) {
       out.println(d[vertexTo]);
@@ -58,20 +61,20 @@ public class Problem4 {
     }
   }
 
-  private static void findMinLength(List<List<Rib>> list, int vertexFrom) {
-    d[vertexFrom] = 0;
-    parentsMin[vertexFrom] = -1;
+  private static void findMinLength(int vertexFrom) {
+
     queue.add(vertexFrom);
 
     while (!queue.isEmpty()) {
-      int i = queue.poll();
-      visited[i] = true;
-      List<Rib> ribs = list.get(i);
-      for (Rib rib : ribs) {
-        if (d[i] + rib.value < d[rib.vertexTo]) {
-          d[rib.vertexTo] = d[i] + rib.value;
-          parentsMin[rib.vertexTo] = i;
+      int currentVertex = queue.poll();
+      visited[currentVertex] = true;
+
+      for (Rib rib : list.get(currentVertex)) {
+        if (d[currentVertex] + rib.value < d[rib.vertexTo]) {
+          d[rib.vertexTo] = d[currentVertex] + rib.value;
+          parentsMin[rib.vertexTo] = currentVertex;
         }
+
         if (!visited[rib.vertexTo]) {
           queue.add(rib.vertexTo);
         }
