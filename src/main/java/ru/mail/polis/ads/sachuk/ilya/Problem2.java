@@ -1,10 +1,7 @@
 package ru.mail.polis.ads.sachuk.ilya;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Problem2 {
 
@@ -18,12 +15,16 @@ public class Problem2 {
   private static int min = Integer.MAX_VALUE;
   private static boolean isCycled = false;
   private static List<Integer> cycledVertexes = new ArrayList<>();
+  private static int cycleStart;
+  private static int cycleEnd;
+  private static int[] parents;
 
   private static void solve(final FastScanner in, final PrintWriter out) {
     int n = in.nextInt();
     int k = in.nextInt();
 
     color = new Color[n];
+    parents = new int[n];
     List<List<Integer>> list = new ArrayList<>();
 
     for (int i = 0; i < n; i++) {
@@ -41,63 +42,64 @@ public class Problem2 {
       list.get(x).add(y);
     }
 
-    bfd(list, 0);
+    findCycles(list);
 
     if (isCycled) {
       out.println("Yes");
-      out.println(cycledVertexes.stream()
-              .min(Comparator.comparing(Integer::valueOf))
-              .get() + 1);
-    }
-    else {
+      out.println(min + 1);
+    } else {
       out.println(-1);
     }
   }
 
+  private static void bfd(List<List<Integer>> list, int currentVertex) {
 
-//  private static void bfd(int[][] arr, int index) {
-//
-//    if (visited[index]) {
-//      return;
-//    }
-//    System.out.println(index);
-//
-//    visited[index] = true;
-//
-//    for (int i = 0; i < arr.length; i++) {
-//      if (arr[index][i] == 1) {
-//        bfd(arr, i);
-//      }
-//    }
-//  }
+    color[currentVertex] = Color.GREY;
 
-  private static void bfd(List<List<Integer>> list, int index) {
-
-    color[index] = Color.GREY;
-
-    for (int i : list.get(index)) {
+    for (int i : list.get(currentVertex)) {
 
       if (color[i] == Color.WHITE) {
-        bfd(list, i );
+        cycleEnd = i;
+        parents[i] = currentVertex;
+        bfd(list, i);
       }
 
       if (color[i] == Color.GREY) {
+        cycleStart = i;
         isCycled = true;
-        cycledVertexes.add(i);
+//        cycledVertexes.add(i);
         return;
       }
     }
-    color[index] = Color.BLACK;
+    color[currentVertex] = Color.BLACK;
   }
 
+  private static void findCycles(List<List<Integer>> list) {
+    for (int i = 0; i < list.size(); i++) {
+      parents[i] = -1;
+      bfd(list, i);
+      kek();
+      try {
+        int tmpMin = cycledVertexes.stream()
+                .min(Comparator.comparing(Integer::valueOf))
+                .get();
+        min = Math.min(tmpMin, min);
+      } catch (Exception e) {
+      }
+      cycledVertexes.clear();
+      cycleStart = 0;
+      cycleEnd = 0;
+      parents = new int[list.size()];
+    }
+  }
 
-//6 6
-//1 2
-//2 3
-//3 4
-//4 5
-//5 2
-//4 6
+  private static void kek() {
+    int tmpCycleEnd = cycleEnd;
+    while (tmpCycleEnd != parents[cycleStart]) {
+      cycledVertexes.add(tmpCycleEnd);
+      tmpCycleEnd = parents[tmpCycleEnd];
+    }
+  }
 
   private static class FastScanner {
     private final BufferedReader reader;
